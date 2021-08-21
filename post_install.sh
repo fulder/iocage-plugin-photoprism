@@ -9,8 +9,7 @@ pkg install -y photoprism-g20210523-FreeBSD-12.2-noAVX.txz
 user_name="photoprism"
 
 echo "Creating new user with name: ${user_name}"
-pw useradd -n ${user_name} -c "Bazarr" -s /sbin/nologin -w no
-chown -R ${user_name} /usr/local/bazarr
+pw useradd -n ${user_name} -c "Photoprism" -s /sbin/nologin -w no
 
 echo "Start photoprism service"
 chmod +x /usr/local/etc/rc.d/photoprism
