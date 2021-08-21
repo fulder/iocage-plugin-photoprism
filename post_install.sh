@@ -12,6 +12,7 @@ sysrc -f /etc/rc.conf photoprism_enable="YES"
 sysrc -f /etc/rc.conf photoprism_assetspath="/var/db/photoprism/assets"
 sysrc -f /etc/rc.conf photoprism_storagepath="/var/db/photoprism/storage"
 sysrc -f /etc/rc.conf photoprism_originalspath="/var/db/photoprism/storage/originals"
+sysrc -f /etc/rc.conf photoprism_public="true"
 service photoprism start
 
 echo "Post install completed!"
