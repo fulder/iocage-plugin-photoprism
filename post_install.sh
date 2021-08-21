@@ -1,9 +1,20 @@
 #!/bin/sh
 
-echo "Clone photoprism repo"
-git clone https://github.com/huo-ju/photoprism-freebsd-port
+echo "Download photoprism prebuilt package"
+fetch https://github.com/psa/photoprism-freebsd-port/releases/download/2021-05-23/photoprism-g20210523-FreeBSD-12.2-noAVX.txz
 
-echo "Run make install"
-cd photoprism-freebsd-port
-#make config
-#make && make install
+echo "Install photoprism"
+pkg install -y photoprism-g20210523-FreeBSD-12.2-noAVX.txz
+
+user_name="photoprism"
+
+echo "Creating new user with name: ${user_name}"
+pw useradd -n ${user_name} -c "Bazarr" -s /sbin/nologin -w no
+chown -R ${user_name} /usr/local/bazarr
+
+echo "Start photoprism service"
+chmod +x /usr/local/etc/rc.d/photoprism
+sysrc -f /etc/rc.conf photoprism_enable="YES"
+service photoprism start
+
+echo "Post install completed!"

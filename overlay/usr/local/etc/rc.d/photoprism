@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# PROVIDE: photoprism
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add these lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# photoprism_enable (bool):	Set to NO by default.
+#				Set it to YES to enable photoprism.
+# photoprism_dir: Directory where photoprism database files are stored
+#             Default: /var/db/photoprism
+# photoprism_damon_user: User to start the deamon with
+#                    Default: photoprism
+
+. /etc/rc.subr
+
+name="photoprism"
+rcvar="${name}_enable"
+
+stop_postcmd=photoprism_postcmd
+
+load_rc_config $name
+: ${photoprism_enable:="NO"}
+: ${photoprism_dir:="/var/db/photoprism"}
+: ${photoprism_daemon_user:="photoprism"}
+
+pidfile="${photoprism_dir}/photoprism.pid"
+command="/usr/sbin/daemon"
+
+default_flags="--assets-path=${photoprism_dir}/assets --storage-path=${photoprism_dir}/storage --originals-path=${photoprism_dir}/storage/originals --import-path=${photoprism_dir}/storage/import"
+
+command_args="-o ${photoprism_log} -P ${pidfile} -u ${photoprism_daemon_user} photoprism ${default_flags}  --read-only --public start"
+
+photoprism_postcmd()
+{
+  killall -u ${photoprism_daemon_user} -9
+}
+
+run_rc_command "$1"
